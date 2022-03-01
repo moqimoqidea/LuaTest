@@ -4,19 +4,21 @@
 --- DateTime: 2022/2/28 19:42
 ---
 
-local list = { 10, 20, 30, 40, 50, 60, 70, 80, 90 }
+local list = { 1, 60, 0,
+               5, 300, 10,
+               10, 600, 60,
+               20, 0, 1800 }
 
 local threshold_map, fail_map, cooldown_map = {}, {}, {}
 
 for index, value in ipairs(list) do
     if index % 3 == 1 then
-        threshold_map[index] = value
+        print("aaa:", index, value)
+        threshold_map[math.ceil(index / 3)] = value
         fail_map[value] = list[index + 1]
         cooldown_map[value] = list[index + 2]
     end
 end
-
-
 
 print('------------------')
 for i, v in pairs(threshold_map) do
@@ -35,21 +37,15 @@ end
 
 print('------------------')
 
-local fail_count = 10
+local fail_count = 1
 local fail_ttl = 999
-
-if fail_count == 1 then
-    print('fail_count == 1')
-    print('expire fail key 60 seconds')
-    return {fail_count, fail_ttl}
-end
 
 print('------------------')
 
 for i, v in pairs(threshold_map) do
     print(i, v)
     if fail_count == v then
-        print('fail_count == v')
+        print('fail_count =' .. v)
         print('expire fail key' .. fail_map[v] .. 'seconds')
         print('expire cooldown key' .. cooldown_map[v] .. 'seconds')
         break
@@ -58,4 +54,4 @@ end
 
 print('------------------')
 
-return {fail_count, fail_ttl}
+return { fail_count, fail_ttl }
